@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusHire Analytics</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div id="splash-screen" class="splash-screen">
+        <div class="logo-container">
+            <img src="drdo-logo.png" alt="DRDO Logo" class="splash-logo">
+            <img src="sspl-logo.png" alt="SSPL Logo" class="splash-logo">
+        </div>
+        <div class="splash-text">
+            <h1>Project CampusHire</h1>
+            <p>By: KASAK</p>
+            <p>Student of Dr. Akhilesh Das Gupta Institute of Professional Studies</p>
+            <p>Pursuing B.Tech in Artificial Intelligence and Data Science</p>
+            <p>During Internship</p>
+        </div>
+    </div>
+    <!-- Landing Page -->
+    <div class="page active" id="landing-page">
+        <header class="header">
+            <div class="container">
+                <div class="logo">
+                    <h1>CampusHire Analytics</h1>
+                    <p>Streamlining Campus Placements</p>
+                </div>
+                <nav class="nav">
+                    <button class="btn btn-outline" onclick="showLogin()">Login</button>
+                    <button class="btn btn-primary" onclick="showRegister()">Register</button>
+                </nav>
+            </div>
+        </header>
+
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h2>Centralized Placement Management System</h2>
+                    <p>Connecting students, companies, and placement officers in one comprehensive platform</p>
+                </div>
+                <div class="hero-features">
+                    <div class="feature-card">
+                        <div class="feature-icon">🎓</div>
+                        <h3>Student Panel</h3>
+                        <p>Register, view opportunities, and apply to jobs seamlessly</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📊</div>
+                        <h3>T&P Panel</h3>
+                        <p>Manage student data and track placement progress with analytics</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🏢</div>
+                        <h3>Company Panel</h3>
+                        <p>Post jobs with CGPA criteria and connect with qualified candidates</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Role Chooser Modal -->
+    <div class="modal" id="role-modal">
+        <div class="modal-content role-chooser">
+            <div class="modal-header">
+                <h3>Select Your Role</h3>
+                <button class="close-btn" onclick="closeModal('role-modal')">×</button>
+            </div>
+            <div class="role-options">
+                <button class="role-btn" data-role="student" onclick="selectRole('student')">Student</button>
+                <button class="role-btn" data-role="tnp" onclick="selectRole('tnp')">T&P Panel</button>
+                <button class="role-btn" data-role="company" onclick="selectRole('company')">Company</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Role Chooser Modal (New) -->
+    <div class="modal" id="login-role-modal">
+        <div class="modal-content role-chooser">
+            <div class="modal-header">
+                <h3>Select Your Role to Login</h3>
+                <button class="close-btn" onclick="closeModal('login-role-modal')">×</button>
+            </div>
+            <div class="role-options">
+                <button class="role-btn" data-role="student" onclick="selectLoginRole('student')">Student</button>
+                <button class="role-btn" data-role="tnp" onclick="selectLoginRole('tnp')">T&P Panel</button>
+                <button class="role-btn" data-role="company" onclick="selectLoginRole('company')">Company</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal" id="login-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Login to CampusHire</h3>
+                <button class="close-btn" onclick="closeModal('login-modal')">×</button>
+            </div>
+            <div id="login-message"></div>
+            <form class="auth-form" id="login-form">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" name="password" required>
+                </div>
+                <input type="hidden" id="login-role" name="role">
+                <button type="submit" class="btn btn-primary btn-full">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="modal" id="register-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Register for CampusHire</h3>
+            <button class="close-btn" onclick="closeModal('register-modal')">×</button>
+        </div>
+        <div id="register-message"></div>
+        <form class="auth-form" id="register-form" autocomplete="off">
+            <div class="form-group">
+                <label for="register-role">Register As</label>
+                <select id="register-role" name="role" onchange="showRoleFields()" required>
+                    <option value="" disabled selected>Select Role</option>
+                    <option value="student">Student</option>
+                    <option value="tnp">T&P Panel</option>
+                    <option value="company">Company</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="register-name">Full Name</label>
+                <input type="text" id="register-name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="register-email">Email</label>
+                <input type="email" id="register-email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="register-phone">Phone Number (with country code, e.g., +91)</label>
+                <input type="tel" id="register-phone" name="phone" required pattern="\+[0-9]{1,3}[0-9]{10}">
+            </div>
+            <div class="form-group">
+                <label for="register-password">Password</label>
+                <input type="password" id="register-password" name="password" required pattern="(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-zA-Z]).{8,}">
+                <small>Password must be at least 8 characters, including a number and a special character.</small>
+            </div>
+            <!-- Student-specific fields -->
+            <div class="role-fields" id="student-fields">
+                <div class="form-group">
+                    <label for="register-course">Course</label>
+                    <select id="register-course" name="course" required disabled>
+                        <option value="" disabled selected>Select Course</option>
+                        <option value="B.Tech">B.Tech</option>
+                        <option value="BCA">BCA</option>
+                        <option value="BBA">BBA</option>
+                        <option value="MBA">MBA</option>
+                        <option value="LLB">LLB</option>
+                        <option value="BA-LLB">BA-LLB</option>
+                    </select>
+                </div>
+            </div>
+            <!-- T&P-specific fields -->
+            <div class="role-fields" id="tnp-fields">
+                <div class="form-group">
+                    <label for="register-employee-id">Employee ID</label>
+                    <input type="text" id="register-employee-id" name="employeeId" required disabled>
+                </div>
+                <div class="form-group">
+                    <label for="register-position">Position</label>
+                    <select id="register-position" name="position" required disabled>
+                        <option value="" disabled selected>Select Position</option>
+                        <option value="Placement Head">Placement Head</option>
+                        <option value="Coordinator">Coordinator</option>
+                        <option value="Assistant Coordinator">Assistant Coordinator</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="register-department-tnp">Department</label>
+                    <select id="register-department-tnp" name="department" required disabled>
+                        <option value="" disabled selected>Select Department</option>
+                        <option value="CSE">Computer Science</option>
+                        <option value="ECE">Electronics & Communication</option>
+                        <option value="ME">Mechanical Engineering</option>
+                        <option value="EE">Electrical Engineering</option>
+                        <option value="IT">Information Technology</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="register-phone-tnp">Phone Number (with country code, e.g., +91)</label>
+                    <input type="tel" id="register-phone-tnp" name="phoneTnp" required pattern="\+[0-9]{1,3}[0-9]{10}">
+                </div>
+            </div>
+            <!-- Company-specific fields -->
+            <div class="role-fields" id="company-fields">
+                <div class="form-group">
+                    <label for="register-hr-id">HR ID</label>
+                    <input type="text" id="register-hr-id" name="hrId" required disabled>
+                </div>
+                <div class="form-group">
+                    <label for="register-company-name">Company Name</label>
+                    <input type="text" id="register-company-name" name="companyName" required disabled>
+                </div>
+                <div class="form-group">
+                    <label for="register-industry">Industry</label>
+                    <input type="text" id="register-industry" name="industry" required disabled>
+                </div>
+                <div class="form-group">
+                    <label for="register-website">Website</label>
+                    <input type="url" id="register-website" name="website" required disabled>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full">Register</button>
+        </form>
+    </div>
+</div>
+
+    <!-- Student Dashboard -->
+    <div class="page" id="student-dashboard">
+        <header class="dashboard-header">
+            <div class="container">
+                <div class="dashboard-nav">
+                    <h2>Student Dashboard</h2>
+                    <div class="nav-items">
+                        <button class="nav-btn active" onclick="showStudentSection('profile')">Profile</button>
+                        <button class="nav-btn" onclick="showStudentSection('jobs')">Jobs</button>
+                        <button class="nav-btn" onclick="showStudentSection('applications')">Applications</button>
+                        <button class="nav-btn" onclick="logout()">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div class="dashboard-content container">
+            <!-- Profile Section -->
+            <div class="dashboard-section active" id="student-profile">
+                <div class="section-header">
+                    <h3>My Profile</h3>
+                    <button class="btn btn-primary" onclick="editStudentProfile()">Edit Profile</button>
+                </div>
+                <div class="profile-card">
+                    <div class="profile-info">
+                        <div class="profile-avatar">👤</div>
+                        <div class="profile-details">
+                            <h4 id="student-name">Student Name</h4>
+                            <p id="student-email">student@college.edu</p>
+                            <p id="student-course">Course</p>
+                            <p id="student-department">Department</p>
+                            <p id="student-year">Year</p>
+                            <p id="student-cgpa">CGPA</p>
+                            <p id="student-phone">Phone</p>
+                        </div>
+                    </div>
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <span class="stat-number" id="applications-count">0</span>
+                            <span class="stat-label">Applications</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="interviews-count">0</span>
+                            <span class="stat-label">Interviews</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="offers-count">0</span>
+                            <span class="stat-label">Offers</span>
+                        </div>
+                    </div>
+                </div>
+<div class="skills-section">
+    <h4>Skills</h4>
+    <select id="student-skills-dropdown" name="skills" multiple size="10" style="width: 100%; padding: 8px; border-radius: 8px; border: 2px solid #e5e7eb; font-size: 14px;">
+        <option value="JavaScript">JavaScript</option>
+        <option value="Python">Python</option>
+        <option value="Java">Java</option>
+        <option value="C++">C++</option>
+        <option value="C#">C#</option>
+        <option value="Ruby">Ruby</option>
+        <option value="Go">Go</option>
+        <option value="PHP">PHP</option>
+        <option value="Swift">Swift</option>
+        <option value="Kotlin">Kotlin</option>
+        <option value="TypeScript">TypeScript</option>
+        <option value="SQL">SQL</option>
+        <option value="HTML">HTML</option>
+        <option value="CSS">CSS</option>
+        <option value="React">React</option>
+        <option value="Angular">Angular</option>
+        <option value="Vue.js">Vue.js</option>
+        <option value="Node.js">Node.js</option>
+        <option value="Django">Django</option>
+        <option value="Flask">Flask</option>
+        <option value="Spring">Spring</option>
+        <option value="Laravel">Laravel</option>
+        <option value="Docker">Docker</option>
+        <option value="Kubernetes">Kubernetes</option>
+        <option value="AWS">AWS</option>
+        <option value="Azure">Azure</option>
+        <option value="GCP">GCP</option>
+        <option value="Machine Learning">Machine Learning</option>
+        <option value="Data Science">Data Science</option>
+        <option value="Artificial Intelligence">Artificial Intelligence</option>
+        <option value="DevOps">DevOps</option>
+        <option value="Git">Git</option>
+        <option value="Linux">Linux</option>
+        <option value="MATLAB">MATLAB</option>
+        <option value="TensorFlow">TensorFlow</option>
+        <option value="PyTorch">PyTorch</option>
+        <option value="Blockchain">Blockchain</option>
+        <option value="Cybersecurity">Cybersecurity</option>
+        <option value="UI/UX Design">UI/UX Design</option>
+        <option value="Mobile Development">Mobile Development</option>
+    </select>
+</div>
+            </div>
+            <!-- Jobs Section -->
+            <div class="dashboard-section" id="student-jobs">
+                <div class="section-header">
+                    <h3>Available Opportunities</h3>
+                    <div class="filter-controls">
+                        <select id="job-filter" onchange="filterJobs()">
+                            <option value="">All Types</option>
+                            <option value="job">Jobs</option>
+                            <option value="internship">Internships</option>
+                        </select>
+                        <select id="department-filter" onchange="filterJobs()">
+                            <option value="">All Departments</option>
+                            <option value="CSE">Computer Science</option>
+                            <option value="ECE">Electronics & Communication</option>
+                            <option value="ME">Mechanical Engineering</option>
+                            <option value="EE">Electrical Engineering</option>
+                            <option value="IT">Information Technology</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="jobs-grid" id="jobs-grid"></div>
+            </div>
+            <!-- Applications Section -->
+            <div class="dashboard-section" id="student-applications">
+                <div class="section-header">
+                    <h3>My Applications</h3>
+                </div>
+                <div class="applications-list" id="applications-list"></div>
+            </div>
+        </div>
+    </div>
+
+    
+
+    <!-- T&P Panel Dashboard -->
+    <div class="page" id="tnp-dashboard">
+        <header class="dashboard-header">
+            <div class="container">
+                <div class="dashboard-nav">
+                    <h2>T&P Panel Dashboard</h2>
+                    <div class="nav-items">
+                        <button class="nav-btn active" onclick="showTnpSection('profile')">Profile</button>
+                        <button class="nav-btn" onclick="showTnpSection('overview')">Overview</button>
+                        <button class="nav-btn" onclick="showTnpSection('students')">Students</button>
+                        <button class="nav-btn" onclick="showTnpSection('companies')">Companies</button>
+                        <button class="nav-btn" onclick="showTnpSection('jobs')">Jobs</button>
+                        <button class="nav-btn" onclick="showTnpSection('placements')">Placements</button>
+                        <button class="nav-btn" onclick="logout()">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div class="dashboard-content container">
+            <!-- Profile Section -->
+            <div class="dashboard-section active" id="tnp-profile">
+                <div class="section-header">
+                    <h3>My Profile</h3>
+                    <button class="btn btn-primary" onclick="editTnpProfile()">Edit Profile</button>
+                </div>
+                <div class="profile-card">
+                    <div class="profile-info">
+                        <div class="profile-avatar">👨‍💼</div>
+                        <div class="profile-details">
+                            <h4 id="tnp-name">T&P Panel Name</h4>
+                            <p id="tnp-email">tnp@college.edu</p>
+                            <p id="tnp-position">Position</p>
+                            <p id="tnp-department">Department</p>
+                            <p id="tnp-employee-id">Employee ID</p>
+                            <p id="tnp-phone">Phone</p>
+                        </div>
+                    </div>
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <span class="stat-number" id="managed-students">0</span>
+                            <span class="stat-label">Students</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="managed-companies">0</span>
+                            <span class="stat-label">Companies</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="managed-placements">0</span>
+                            <span class="stat-label">Placements</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Overview Section -->
+            <div class="dashboard-section" id="tnp-overview">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">🎓</div>
+                        <div class="stat-info">
+                            <h4 id="total-students">0</h4>
+                            <p>Total Students</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🏢</div>
+                        <div class="stat-info">
+                            <h4 id="total-companies">0</h4>
+                            <p>Registered Companies</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">💼</div>
+                        <div class="stat-info">
+                            <h4 id="total-jobs">0</h4>
+                            <p>Job Postings</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-info">
+                            <h4 id="total-placements">0</h4>
+                            <p>Successful Placements</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="charts-section">
+                    <div class="chart-card">
+                        <h4>Department-wise Student Distribution</h4>
+                        <div class="chart-content" id="department-distribution"></div>
+                    </div>
+                    <div class="chart-card">
+                        <h4>Placement Statistics by Department</h4>
+                        <div class="chart-content" id="placement-stats"></div>
+                    </div>
+                </div>
+                <div class="recent-activities">
+                    <h4>Recent Activities</h4>
+                    <div class="activities-list" id="recent-activities-list"></div>
+                </div>
+            </div>
+            <!-- Students Section -->
+            <div class="dashboard-section" id="tnp-students">
+                <div class="section-header">
+                    <h3>Student Management</h3>
+                    <div class="filter-controls">
+                        <select id="student-dept-filter" onchange="filterStudents()">
+                            <option value="">All Departments</option>
+                            <option value="CSE">Computer Science</option>
+                            <option value="ECE">Electronics & Communication</option>
+                            <option value="ME">Mechanical Engineering</option>
+                            <option value="EE">Electrical Engineering</option>
+                            <option value="IT">Information Technology</option>
+                        </select>
+                        <select id="student-status-filter" onchange="filterStudents()">
+                            <option value="">All Students</option>
+                            <option value="placed">Placed</option>
+                            <option value="unplaced">Unplaced</option>
+                        </select>
+                        <input type="number" id="min-cgpa-filter" placeholder="Min CGPA" step="0.1" min="0" max="10" onchange="filterStudents()">
+                    </div>
+                </div>
+                <div class="data-table" id="students-table"></div>
+            </div>
+            <!-- Companies Section -->
+            <div class="dashboard-section" id="tnp-companies">
+                <div class="section-header">
+                    <h3>Company Management</h3>
+                </div>
+                <div class="data-table" id="companies-table"></div>
+            </div>
+            <!-- Jobs Section -->
+            <div class="dashboard-section" id="tnp-jobs">
+                <div class="section-header">
+                    <h3>Job Postings Management</h3>
+                    <div class="filter-controls">
+                        <select id="job-type-filter" onchange="filterTnpJobs()">
+                            <option value="">All Types</option>
+                            <option value="job">Jobs</option>
+                            <option value="internship">Internships</option>
+                        </select>
+                        <select id="job-status-filter" onchange="filterTnpJobs()">
+                            <option value="">All Status</option>
+                            <option value="active">Active</option>
+                            <option value="expired">Expired</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="jobs-list" id="tnp-jobs-list"></div>
+            </div>
+            <!-- Placements Section -->
+            <div class="dashboard-section" id="tnp-placements">
+                <div class="section-header">
+                    <h3>Placement Records</h3>
+                </div>
+                <div class="data-table" id="placements-table"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Company Dashboard -->
+    <div class="page" id="company-dashboard">
+        <header class="dashboard-header">
+            <div class="container">
+                <div class="dashboard-nav">
+                    <h2>Company Dashboard</h2>
+                    <div class="nav-items">
+                        <button class="nav-btn active" onclick="showCompanySection('profile')">Profile</button>
+                        <button class="nav-btn" onclick="showCompanySection('jobs')">My Jobs</button>
+                        <button class="nav-btn" onclick="showCompanySection('students')">Browse Students</button>
+                        <button class="nav-btn" onclick="showCompanySection('applications')">Applications</button>
+                        <button class="nav-btn" onclick="logout()">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div class="dashboard-content container">
+            <!-- Profile Section -->
+            <div class="dashboard-section active" id="company-profile">
+                <div class="section-header">
+                    <h3>Company Profile</h3>
+                    <button class="btn btn-primary" onclick="editCompanyProfile()">Edit Profile</button>
+                </div>
+                <div class="profile-card">
+                    <div class="profile-info">
+                        <div class="profile-avatar">🏢</div>
+                        <div class="profile-details">
+                            <h4 id="company-name">Company Name</h4>
+                            <p id="company-hr-name">HR Name</p>
+                            <p id="company-hr-id">HR ID</p>
+                            <p id="company-hr-email">HR Email</p>
+                            <p id="company-industry">Industry</p>
+                            <p id="company-website">Website</p>
+                            <p id="company-phone">Phone</p>
+                        </div>
+                    </div>
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <span class="stat-number" id="company-jobs-count">0</span>
+                            <span class="stat-label">Job Postings</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="company-applications-count">0</span>
+                            <span class="stat-label">Applications</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="company-hires-count">0</span>
+                            <span class="stat-label">Hires</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Jobs Section -->
+            <div class="dashboard-section" id="company-jobs">
+                <div class="section-header">
+                    <h3>My Job Postings</h3>
+                    
+                </div>
+                <div class="jobs-list" id="company-jobs-list"></div>
+            </div>
+            <!-- Students Section -->
+            <div class="dashboard-section" id="company-students">
+                <div class="section-header">
+                    <h3>Browse Students</h3>
+                    <div class="filter-controls">
+                        <select id="student-dept-filter-company" onchange="filterCompanyStudents()">
+                            <option value="">All Departments</option>
+                            <option value="CSE">Computer Science</option>
+                            <option value="ECE">Electronics & Communication</option>
+                            <option value="ME">Mechanical Engineering</option>
+                            <option value="EE">Electrical Engineering</option>
+                            <option value="IT">Information Technology</option>
+                        </select>
+                        <input type="number" id="min-cgpa-company" placeholder="Min CGPA" step="0.1" min="0" max="10" onchange="filterCompanyStudents()">
+                        <select id="year-filter-company" onchange="filterCompanyStudents()">
+                            <option value="">All Years</option>
+                            <option value="1">1st Year</option>
+                            <option value="2">2nd Year</option>
+                            <option value="3">3rd Year</option>
+                            <option value="4">4th Year</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="students-grid" id="students-grid"></div>
+            </div>
+            <!-- Applications Section -->
+            <div class="dashboard-section" id="company-applications">
+                <div class="section-header">
+                    <h3>Job Applications</h3>
+                    <div class="filter-controls">
+                        <select id="application-status-filter" onchange="filterApplications()">
+                            <option value="">All Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="accepted">Accepted</option>
+                            <option value="rejected">Rejected</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="applications-list" id="job-applications-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Job Posting Modal -->
+        <!-- Job Posting Modal -->
+        <div class="modal" id="job-form-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Post New Opportunity</h3>
+                    <button class="close-btn" onclick="closeModal('job-form-modal')">×</button>
+                </div>
+                <form class="form" id="job-form">
+                    <div class="form-group">
+                        <label for="opportunity-type">Opportunity Type <span class="required">*</span></label>
+                        <select id="opportunity-type" required onchange="toggleOpportunityType()">
+                            <option value="" disabled selected>Select Type</option>
+                            <option value="internship">Internship</option>
+                            <option value="job">Job</option>
+                        </select>
+                    </div>
+    
+                    <!-- Internship Details Section -->
+                    <div id="internship-sections" style="display: none;">
+                        <h4>Internship Details</h4>
+                        <div class="collapsible-section">
+                            <button type="button" class="collapsible-header">📄 Internship Details</button>
+                            <div class="collapsible-content">
+                                <div class="form-group">
+                                    <label for="internship-position">Position <span class="required">*</span></label>
+                                    <input type="text" id="internship-position">
+                                </div>
+                                <div class="form-group">
+                                    <label for="internship-domain">Domain <span class="required">*</span></label>
+                                    <input type="text" id="internship-domain">
+                                </div>
+                                <div class="form-group">
+                                    <label for="internship-openings">Number of Openings <span class="required">*</span></label>
+                                    <input type="number" id="internship-openings" min="1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="internship-duration">Duration <span class="required">*</span></label>
+                                    <select id="internship-duration">
+                                        <option value="" disabled selected>Select Duration</option>
+                                        <option value="1-month">1 Month</option>
+                                        <option value="2-months">2 Months</option>
+                                        <option value="3-months">3 Months</option>
+                                        <option value="6-months">6 Months</option>
+                                        <option value="1-year">1 Year</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="internship-start-date">Start Date <span class="required">*</span></label>
+                                    <input type="date" id="internship-start-date">
+                                </div>
+                                <div class="form-group">
+                                    <label for="internship-stipend">Stipend Amount (or None) <span class="required">*</span></label>
+                                    <input type="number" id="internship-stipend" min="0" placeholder="Enter amount or 0 for None">
+                                </div>
+                                <div class="form-group">
+                                    <label for="internship-fulltime-offer">Offer of Full-Time after Internship? <span class="required">*</span></label>
+                                    <select id="internship-fulltime-offer">
+                                        <option value="" disabled selected>Select</option>
+                                        <option value="yes">Yes</option>
+                                        <option value="no">No</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="collapsible-section">
+                            <button type="button" class="collapsible-header">📞 Company Contact Info</button>
+                            <div class="collapsible-content">
+                                <div class="form-group">
+                                    <label for="internship-company-name">Company Name <span class="required">*</span></label>
+                                    <input type="text" id="internship-company-name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="internship-registered-address">Registered Address <span class="required">*</span></label>
+                                    <input type="text" id="internship-registered-address">
+                                </div>
+                                <div class="form-group">
+                                    <label for="internship-hr-name">HR Name <span class="required">*</span></label>
+                                    <input type="text" id="internship-hr-name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="internship-hr-designation">HR Designation <span class="required">*</span></label>
+                                    <input type="text" id="internship-hr-designation">
+                                </div>
+                                <div class="form-group">
+                                    <label for="internship-hr-email">HR Email <span class="required">*</span></label>
+                                    <input type="email" id="internship-hr-email">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <!-- Job Details Section -->
+                    <div id="job-sections" style="display: none;">
+                        <h4>Job Details</h4>
+                        <div class="collapsible-section">
+                            <button type="button" class="collapsible-header">📄 Job Details</button>
+                            <div class="collapsible-content">
+                                <div class="form-group">
+                                    <label for="job-title-designation">Job Title / Designation <span class="required">*</span></label>
+                                    <input type="text" id="job-title-designation">
+                                </div>
+                                <div class="form-group">
+                                    <label for="job-work-type">Work Type <span class="required">*</span></label>
+                                    <select id="job-work-type">
+                                        <option value="" disabled selected>Select Work Type</option>
+                                        <option value="full-time">Full-time</option>
+                                        <option value="contract">Contract</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="job-timings">Timings</label>
+                                    <input type="text" id="job-timings" placeholder="e.g., 9 AM - 6 PM IST">
+                                </div>
+                                <div class="form-group">
+                                    <label for="job-locations">Job Locations <span class="required">*</span></label>
+                                    <select id="job-locations" multiple>
+                                        <option value="remote">Remote</option>
+                                        <option value="onsite">Onsite</option>
+                                        <option value="hybrid">Hybrid</option>
+                                        <option value="delhi">Delhi</option>
+                                        <option value="bangalore">Bangalore</option>
+                                        <option value="mumbai">Mumbai</option>
+                                        <option value="hyderabad">Hyderabad</option>
+                                        <option value="chennai">Chennai</option>
+                                    </select>
+                                    <small>Hold Ctrl/Cmd to select multiple locations</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="job-total-openings">Total Openings <span class="required">*</span></label>
+                                    <input type="number" id="job-total-openings" min="1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="job-required-skills">Required Skills <span class="required">*</span></label>
+                                    <input type="text" id="job-required-skills" placeholder="Type skill and press Enter">
+                                    <div id="job-skills-display" class="skills-container mt-2"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="job-description">Job Description <span class="required">*</span></label>
+                                    <textarea id="job-description" rows="5"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="job-responsibilities">Responsibilities <span class="required">*</span></label>
+                                    <textarea id="job-responsibilities" rows="5"></textarea>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="collapsible-section">
+                            <button type="button" class="collapsible-header">🎓 Eligibility</button>
+                            <div class="collapsible-content">
+                                <div class="form-group">
+                                    <label for="eligibility-qualification">Qualification Required <span class="required">*</span></label>
+                                    <input type="text" id="eligibility-qualification" placeholder="e.g., B.Tech, MBA">
+                                </div>
+                                <div class="form-group">
+                                    <label for="eligibility-preferred-courses">Preferred Courses / Branches</label>
+                                    <select id="eligibility-preferred-courses" multiple>
+                                        <option value="CSE">Computer Science Engineering</option>
+                                        <option value="ECE">Electronics & Communication</option>
+                                        <option value="ME">Mechanical Engineering</option>
+                                        <option value="EE">Electrical Engineering</option>
+                                        <option value="IT">Information Technology</option>
+                                        <option value="CE">Civil Engineering</option>
+                                        <option value="MBA">MBA</option>
+                                        <option value="BBA">BBA</option>
+                                    </select>
+                                    <small>Hold Ctrl/Cmd to select multiple courses</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="eligibility-graduation-year">Graduation Year <span class="required">*</span></label>
+                                    <input type="number" id="eligibility-graduation-year" min="2000" max="2050">
+                                </div>
+                                <div class="form-group">
+                                    <label for="eligibility-min-cgpa">Minimum CGPA or % <span class="required">*</span></label>
+                                    <input type="number" id="eligibility-min-cgpa" step="0.1" min="0" max="100" placeholder="e.g., 7.0 CGPA or 60% (enter as 7 or 60)">
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="collapsible-section">
+                            <button type="button" class="collapsible-header">💵 Salary Structure</button>
+                            <div class="collapsible-content">
+                                <div class="form-group">
+                                    <label for="salary-total-ctc">Total CTC (LPA) <span class="required">*</span></label>
+                                    <input type="number" id="salary-total-ctc" step="0.1" min="0">
+                                </div>
+                                <table class="table salary-breakdown-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Component Name</th>
+                                            <th>Amount (₹)</th>
+                                            <th>Notes</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="salary-breakdown-body">
+                                        <tr>
+                                            <td>Basic Pay</td>
+                                            <td><input type="number" class="salary-component-amount" data-component="basic-pay" min="0"></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>HRA</td>
+                                            <td><input type="number" class="salary-component-amount" data-component="hra" min="0"></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Special Allowance</td>
+                                            <td><input type="number" class="salary-component-amount" data-component="special-allowance" min="0"></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Bonus</td>
+                                            <td><input type="number" class="salary-component-amount" data-component="bonus" min="0"></td>
+                                            <td><input type="text" class="salary-component-note" data-component="bonus-note" placeholder="Annual/Monthly?"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>PF/ESIC Deduction</td>
+                                            <td><input type="number" class="salary-component-amount" data-component="pf-esic" min="0"></td>
+                                            <td><input type="text" class="salary-component-note" data-component="pf-esic-note" placeholder="Auto-deducted?"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Gratuity</td>
+                                            <td><input type="number" class="salary-component-amount" data-component="gratuity" min="0"></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr class="custom-salary-component-row" style="display:none;">
+                                            <td><input type="text" class="salary-component-name" data-component="custom-name-1" placeholder="Other (custom field)"></td>
+                                            <td><input type="number" class="salary-component-amount" data-component="custom-amount-1" min="0"></td>
+                                            <td><input type="text" class="salary-component-note" data-component="custom-note-1" placeholder="Optional text"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <button type="button" class="btn btn-outline btn-small mt-2" id="add-custom-salary-component">Add Custom Component</button>
+                                <p class="mt-3">In-hand salary estimate (₹): <span id="in-hand-salary-estimate">0</span></p>
+                            </div>
+                        </div>
+    
+                        <div class="collapsible-section">
+                            <button type="button" class="collapsible-header">🧘 Leaves Policy</button>
+                            <div class="collapsible-content">
+                                <div class="form-group">
+                                    <label for="leaves-total">Total Leaves (per year) <span class="required">*</span></label>
+                                    <input type="number" id="leaves-total" min="0">
+                                </div>
+                                <div class="form-group">
+                                    <label for="leaves-cl">Casual Leave (CL)</label>
+                                    <input type="number" id="leaves-cl" min="0">
+                                </div>
+                                <div class="form-group">
+                                    <label for="leaves-sl">Sick Leave (SL)</label>
+                                    <input type="number" id="leaves-sl" min="0">
+                                </div>
+                                <div class="form-group">
+                                    <label for="leaves-el">Earned Leave (EL)</label>
+                                    <input type="number" id="leaves-el" min="0">
+                                </div>
+                                <div class="form-group">
+                                    <label for="leaves-holiday-list">Holiday List Upload (PDF)</label>
+                                    <input type="file" id="leaves-holiday-list" accept="application/pdf">
+                                </div>
+                                <div class="form-group">
+                                    <label for="leaves-carry-forward">Carry Forward Allowed?</label>
+                                    <select id="leaves-carry-forward">
+                                        <option value="" disabled selected>Select</option>
+                                        <option value="yes">Yes</option>
+                                        <option value="no">No</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="leaves-maternity-paternity">Maternity / Paternity Leave?</label>
+                                    <select id="leaves-maternity-paternity" onchange="toggleMaternityPaternityDays()">
+                                        <option value="" disabled selected>Select</option>
+                                        <option value="yes">Yes</option>
+                                        <option value="no">No</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" id="maternity-paternity-days-group" style="display:none;">
+                                    <label for="leaves-maternity-paternity-days">Number of Days</label>
+                                    <input type="number" id="leaves-maternity-paternity-days" min="0">
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="collapsible-section">
+                            <button type="button" class="collapsible-header">🏥 Benefits & Perks</button>
+                            <div class="collapsible-content">
+                                <div class="form-group">
+                                    <label for="benefits-medical-insurance">Medical Insurance?</label>
+                                    <select id="benefits-medical-insurance" onchange="toggleMedicalInsuranceDetails()">
+                                        <option value="" disabled selected>Select</option>
+                                        <option value="yes">Yes</option>
+                                        <option value="no">No</option>
+                                    </select>
+                                </div>
+                                <div id="medical-insurance-details" style="display:none;">
+                                    <div class="form-group">
+                                        <label for="benefits-coverage-amount">Coverage Amount</label>
+                                        <input type="number" id="benefits-coverage-amount" min="0">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="benefits-family-included">Family Included?</label>
+                                        <select id="benefits-family-included">
+                                            <option value="" disabled selected>Select</option>
+                                            <option value="yes">Yes</option>
+                                            <option value="no">No</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="benefits-wfh">Work From Home Allowed?</label>
+                                    <select id="benefits-wfh">
+                                        <option value="" disabled selected>Select</option>
+                                        <option value="yes">Yes</option>
+                                        <option value="no">No</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="benefits-internet-reimbursement">Internet Reimbursement?</label>
+                                    <select id="benefits-internet-reimbursement">
+                                        <option value="" disabled selected>Select</option>
+                                        <option value="yes">Yes</option>
+                                        <option value="no">No</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="benefits-laptop-provided">Laptop/Asset Provided?</label>
+                                    <select id="benefits-laptop-provided">
+                                        <option value="" disabled selected>Select</option>
+                                        <option value="yes">Yes</option>
+                                        <option value="no">No</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="benefits-dress-code">Dress Code</label>
+                                    <input type="text" id="benefits-dress-code" placeholder="e.g., Business Casual, Smart Casual">
+                                </div>
+                                <div class="form-group">
+                                    <label for="benefits-health-checkups">Annual Health Checkups?</label>
+                                    <select id="benefits-health-checkups">
+                                        <option value="" disabled selected>Select</option>
+                                        <option value="yes">Yes</option>
+                                        <option value="no">No</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="collapsible-section">
+                            <button type="button" class="collapsible-header">📜 Bond / Agreement</button>
+                            <div class="collapsible-content">
+                                <div class="form-group">
+                                    <label for="bond-required">Is Bond Required?</label>
+                                    <select id="bond-required" onchange="toggleBondDetails()">
+                                        <option value="" disabled selected>Select</option>
+                                        <option value="yes">Yes</option>
+                                        <option value="no">No</option>
+                                    </select>
+                                </div>
+                                <div id="bond-details" style="display:none;">
+                                    <div class="form-group">
+                                        <label for="bond-duration-value">Duration</label>
+                                        <input type="number" id="bond-duration-value" min="0">
+                                        <select id="bond-duration-unit">
+                                            <option value="months">Months</option>
+                                            <option value="years">Years</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="bond-penalty-amount">Penalty Amount (₹)</label>
+                                        <input type="number" id="bond-penalty-amount" min="0">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="bond-background-check">Background Check Mandatory?</label>
+                                    <select id="bond-background-check">
+                                        <option value="" disabled selected>Select</option>
+                                        <option value="yes">Yes</option>
+                                        <option value="no">No</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="bond-probation-period">Probation Period (Months)</label>
+                                    <input type="number" id="bond-probation-period" min="0">
+                                </div>
+                                <div class="form-group">
+                                    <label for="bond-notice-period">Notice Period (Months)</label>
+                                    <input type="number" id="bond-notice-period" min="0">
+                                </div>
+                                <div class="form-group">
+                                    <label for="bond-non-compete">Non-compete Clause?</label>
+                                    <select id="bond-non-compete">
+                                        <option value="" disabled selected>Select</option>
+                                        <option value="yes">Yes</option>
+                                        <option value="no">No</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="collapsible-section">
+                            <button type="button" class="collapsible-header">🏢 Company Details</button>
+                            <div class="collapsible-content">
+                                <div class="form-group">
+                                    <label for="company-details-registered-address">Registered Address <span class="required">*</span></label>
+                                    <input type="text" id="company-details-registered-address">
+                                </div>
+                                <div class="form-group">
+                                    <label for="company-details-hr-name">HR Contact Person Name <span class="required">*</span></label>
+                                    <input type="text" id="company-details-hr-name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="company-details-hr-designation">HR Designation <span class="required">*</span></label>
+                                    <input type="text" id="company-details-hr-designation">
+                                </div>
+                                <div class="form-group">
+                                    <label for="company-details-hr-email">HR Email <span class="required">*</span></label>
+                                    <input type="email" id="company-details-hr-email">
+                                </div>
+                                <div class="form-group">
+                                    <label for="company-details-branch-locations">Branch Locations</label>
+                                    <select id="company-details-branch-locations" multiple>
+                                        <option value="delhi">Delhi</option>
+                                        <option value="bangalore">Bangalore</option>
+                                        <option value="mumbai">Mumbai</option>
+                                        <option value="hyderabad">Hyderabad</option>
+                                        <option value="chennai">Chennai</option>
+                                        <option value="pune">Pune</option>
+                                        <option value="kolkata">Kolkata</option>
+                                    </select>
+                                    <small>Hold Ctrl/Cmd to select multiple locations</small>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="collapsible-section">
+                            <button type="button" class="collapsible-header">📎 Attachments (Optional Upload)</button>
+                            <div class="collapsible-content">
+                                <div class="form-group">
+                                    <label for="attachments-job-description-pdf">Job Description PDF</label>
+                                    <input type="file" id="attachments-job-description-pdf" accept="application/pdf">
+                                </div>
+                                <div class="form-group">
+                                    <label for="attachments-salary-structure-pdf">Salary Structure PDF</label>
+                                    <input type="file" id="attachments-salary-structure-pdf" accept="application/pdf">
+                                </div>
+                                <div class="form-group">
+                                    <label for="attachments-leave-policy-pdf">Leave Policy PDF</label>
+                                    <input type="file" id="attachments-leave-policy-pdf" accept="application/pdf">
+                                </div>
+                                <div class="form-group">
+                                    <label for="attachments-bond-copy">Bond Copy</label>
+                                    <input type="file" id="attachments-bond-copy" accept="application/pdf">
+                                </div>
+                                <div class="form-group">
+                                    <label for="attachments-medical-insurance-terms">Medical Insurance Terms</label>
+                                    <input type="file" id="attachments-medical-insurance-terms" accept="application/pdf">
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="collapsible-section">
+                            <button type="button" class="collapsible-header">💡 Bonus (Optional Fields)</button>
+                            <div class="collapsible-content">
+                                <div class="form-group">
+                                    <label for="bonus-growth-opportunities">Growth Opportunities</label>
+                                    <textarea id="bonus-growth-opportunities" rows="3"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="bonus-travel-requirements">Travel Requirements</label>
+                                    <input type="text" id="bonus-travel-requirements">
+                                </div>
+                                <div class="form-group">
+                                    <label for="bonus-id-email-setup-timeline">ID/Email Setup Timeline</label>
+                                    <input type="text" id="bonus-id-email-setup-timeline" placeholder="e.g., Within 3 days of joining">
+                                </div>
+                                <div class="form-group">
+                                    <label for="bonus-onboarding-process">Onboarding Process Description</label>
+                                    <textarea id="bonus-onboarding-process" rows="3"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <button type="submit" class="btn btn-primary btn-full mt-4">Post Opportunity</button>
+                </form>
+            </div>
+        </div>
+    
+
+    <!-- Student Profile Edit Page -->
+    <div class="page" id="student-profile-edit-page">
+        <div class="container">
+            <button class="btn btn-outline mb-3" onclick="showPage('student-dashboard')">Back to Dashboard</button>
+            <h2 class="mb-3">Edit Profile</h2>
+            <form id="student-profile-edit-form" class="form two-column">
+                <div class="form-group">
+                    <label for="edit-student-name">Name</label>
+                    <input type="text" id="edit-student-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-student-phone">Phone Number (with country code, e.g., +91)</label>
+                    <input type="tel" id="edit-student-phone" required pattern="\+[0-9]{1,3}[0-9]{10}">
+                </div>
+                <div class="form-group">
+                    <label for="edit-student-github">GitHub Profile</label>
+                    <input type="url" id="edit-student-github" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-student-linkedin">LinkedIn Profile</label>
+                    <input type="url" id="edit-student-linkedin" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-student-overall-cgpa">Overall CGPA</label>
+                    <input type="number" step="0.1" min="0" max="10" id="edit-student-overall-cgpa" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-student-10th">10th Percentage</label>
+                    <input type="number" step="0.1" min="0" max="100" id="edit-student-10th" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-student-12th">12th Percentage</label>
+                    <input type="number" step="0.1" min="0" max="100" id="edit-student-12th" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-student-interest">Area of Interest</label>
+                    <input type="text" id="edit-student-interest" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-student-grad-year">Graduation Year</label>
+                    <input type="number" id="edit-student-grad-year" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-student-skills">Skills</label>
+                    <select id="edit-student-skills" multiple size="10" style="width: 100%; padding: 8px; border-radius: 8px; border: 2px solid #e5e7eb; font-size: 14px;">
+                        <option value="JavaScript">JavaScript</option>
+                        <option value="Python">Python</option>
+                        <option value="C++">C++</option>
+                        <option value="SQL">SQL</option>
+                        <option value="React">React</option>
+                        <option value="Node.js">Node.js</option>
+                        <option value="Java">Java</option>
+                        <option value="HTML">HTML</option>
+                        <option value="CSS">CSS</option>
+                        <option value="MATLAB">MATLAB</option>
+                        <option value="TypeScript">TypeScript</option>
+                        <option value="SQL">SQL</option>
+                        <option value="React">React</option>
+                        <option value="Angular">Angular</option>
+                        <option value="Vue.js">Vue.js</option>
+                        <option value="Node.js">Node.js</option>
+                        <option value="Django">Django</option>
+                        <option value="Flask">Flask</option>
+                        <option value="Spring">Spring</option>
+                        <option value="Laravel">Laravel</option>
+                        <option value="Docker">Docker</option>
+                        <option value="Kubernetes">Kubernetes</option>
+                        <option value="AWS">AWS</option>
+                        <option value="Azure">Azure</option>
+                        <option value="GCP">GCP</option>
+                        <option value="Machine Learning">Machine Learning</option>
+                        <option value="Data Science">Data Science</option>
+                        <option value="Artificial Intelligence">Artificial Intelligence</option>
+                        <option value="DevOps">DevOps</option>
+                        <option value="Git">Git</option>
+                        <option value="Linux">Linux</option>
+                        <option value="TensorFlow">TensorFlow</option>
+                        <option value="PyTorch">PyTorch</option>
+                        <option value="Blockchain">Blockchain</option>
+                        <option value="Cybersecurity">Cybersecurity</option>
+                        <option value="UI/UX Design">UI/UX Design</option>
+                        <option value="Mobile Development">Mobile Development</option>
+                        <option value="C#">C#</option>
+                        <option value="Ruby">Ruby</option>
+                        <option value="Go">Go</option>
+                        <option value="PHP">PHP</option>
+                        <option value="Swift">Swift</option>
+                        <option value="Kotlin">Kotlin</option>
+                    </select>
+                    <small>Hold Ctrl/Cmd to select multiple skills</small>
+                    <div class="custom-skill-input-group">
+                        <input type="text" id="edit-student-custom-skill" placeholder="Add custom skill">
+                        <button type="button" class="btn btn-secondary btn-small" id="add-custom-skill-btn">Add Skill</button>
+                    </div>
+                    <div id="selected-skills-display" class="skills-container mt-2"></div>
+                </div>
+                <div class="form-group">
+                    <label>Semester-wise CGPA</label>
+                    <button type="button" class="btn btn-outline btn-small" onclick="toggleSemesterSection()">Toggle Semester Details</button>
+                    <div id="semester-section" style="display: none;">
+                        <div id="semester-cgpa-container"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="edit-student-resume">Upload Resume (PDF)</label>
+                    <input type="file" id="edit-student-resume" accept="application/pdf" required>
+                    <p id="resume-preview" class="text-muted"></p>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- T&P Profile Edit Modal -->
+    <div class="modal" id="tnp-profile-edit-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit T&P Panel Profile</h3>
+                <button class="close-btn" onclick="closeModal('tnp-profile-edit-modal')">×</button>
+            </div>
+            <form class="form" id="tnp-profile-edit-form">
+                <div class="form-group">
+                    <label for="edit-tnp-name">Full Name</label>
+                    <input type="text" id="edit-tnp-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-tnp-employee-id">Employee ID</label>
+                    <input type="text" id="edit-tnp-employee-id" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-tnp-position">Position</label>
+                    <select id="edit-tnp-position" required>
+                        <option value="" disabled selected>Select Position</option>
+                        <option value="Placement Head">Placement Head</option>
+                        <option value="Coordinator">Coordinator</option>
+                        <option value="Assistant Coordinator">Assistant Coordinator</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="edit-tnp-department">Department</label>
+                    <select id="edit-tnp-department" required>
+                        <option value="" disabled selected>Select Department</option>
+                        <option value="CSE">Computer Science</option>
+                        <option value="ECE">Electronics & Communication</option>
+                        <option value="ME">Mechanical Engineering</option>
+                        <option value="EE">Electrical Engineering</option>
+                        <option value="IT">Information Technology</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="edit-tnp-phone">Phone Number (with country code, e.g., +91)</label>
+                    <input type="tel" id="edit-tnp-phone" required pattern="\+[0-9]{1,3}[0-9]{10}">
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Update Profile</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Company Profile Edit Modal -->
+    <div class="modal" id="company-profile-edit-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Company Profile</h3>
+                <button class="close-btn" onclick="closeModal('company-profile-edit-modal')">×</button>
+            </div>
+            <form class="form" id="company-profile-edit-form">
+                <div class="form-group">
+                    <label for="edit-company-hr-name">HR Name</label>
+                    <input type="text" id="edit-company-hr-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-company-hr-id">HR ID</label>
+                    <input type="text" id="edit-company-hr-id" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-company-hr-email">HR Email</label>
+                    <input type="email" id="edit-company-hr-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-company-phone">Phone Number (with country code, e.g., +91)</label>
+                    <input type="tel" id="edit-company-phone" required pattern="\+[0-9]{1,3}[0-9]{10}">
+                </div>
+                <div class="form-group">
+                    <label for="edit-company-name">Company Name</label>
+                    <input type="text" id="edit-company-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-company-industry">Industry</label>
+                    <input type="text" id="edit-company-industry" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-company-website">Website</label>
+                    <input type="url" id="edit-company-website" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Update Profile</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
